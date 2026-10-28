@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Máy tính - {{ shop.name }}{% endblock %}
+
+{% block styles %}
+  {{ super() }}
+  <style>
+    .calc { display: grid; gap: 20px; max-width: 420px; padding: 24px 0 8px; }
+    .field label { display: block; margin-bottom: 4px; font-weight: 600; }
+    .field input, .field select {
+      width: 100%; padding: 10px 12px; font: inherit; color: var(--ink);
+      background: #fff; border: 1px solid var(--line); border-radius: 4px;
+    }
+    .field input:focus-visible, .field select:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .field input[aria-invalid="true"] { border-color: #a4161a; }
+    .error { margin: 6px 0 0; color: #a4161a; font-size: .95rem; }
+    .calc button { justify-self: start; cursor: pointer; font: inherit; font-weight: 600; }
+    .result {
+      max-width: 420px; margin: 8px 0 0; padding: 16px 20px; font-size: 1.6rem; font-weight: 800;
+      background: var(--plum-soft); color: var(--plum); border-radius: 6px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="wrap">
+    <h1 class="page-title">Máy tính cơ bản</h1>
+
+    <form class="calc" method="post" action="{{ url_for('calc') }}" novalidate>
+      <div class="field">
+        <label for="a">Số thứ nhất (a)</label>
+        <input id="a" name="a" type="text" inputmode="decimal" autocomplete="off" value="{{ a }}"
+               {% if errors.a %}aria-invalid="true" aria-describedby="a-error"{% endif %}>
+        {% if errors.a %}<p class="error" id="a-error">{{ errors.a }}</p>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="op">Phép toán</label>
+        <select id="op" name="op" {% if errors.op %}aria-invalid="true" aria-describedby="op-error"{% endif %}>
+          {% for symbol in ['+', '-', '*', '/'] %}
+          <option value="{{ symbol }}"{% if op == symbol %} selected{% endif %}>{{ symbol }}</option>
+          {% endfor %}
+        </select>
+        {% if errors.op %}<p class="error" id="op-error">{{ errors.op }}</p>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="b">Số thứ hai (b)</label>
+        <input id="b" name="b" type="text" inputmode="decimal" autocomplete="off" value="{{ b }}"
+               {% if errors.b %}aria-invalid="true" aria-describedby="b-error"{% endif %}>
+        {% if errors.b %}<p class="error" id="b-error">{{ errors.b }}</p>{% endif %}
+      </div>
+
+      {% if errors.form %}<p class="error" role="alert">{{ errors.form }}</p>{% endif %}
+
+      <button class="btn btn-primary" type="submit">Tính</button>
+    </form>
+
+    {% if result %}
+    <p class="result" role="status">{{ result }}</p>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Trang chủ - {{ shop.name }}{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <div class="wrap">
+      <h1>{{ shop.name }}</h1>
+      <p>Quán cà phê trên đường Nguyễn Tất Thành.</p>
+      <a class="btn btn-primary" href="{{ url_for('menu') }}">Xem thực đơn</a>
+      <a class="btn btn-ghost" href="{{ url_for('contact') }}">Liên hệ</a>
+    </div>
+  </section>
+
+  <section class="wrap info">
+    <div>
+      <h2>Địa chỉ</h2>
+      <p class="big">{{ shop.address }}</p>
+    </div>
+    <div>
+      <h2>Điện thoại</h2>
+      <p class="big"><a href="tel:{{ shop.phone | replace(' ', '') }}">{{ shop.phone }}</a></p>
+    </div>
+  </section>
+{% endblock %}

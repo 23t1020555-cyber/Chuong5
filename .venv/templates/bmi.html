@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Chỉ số BMI - {{ shop.name }}{% endblock %}
+
+{% block styles %}
+  {{ super() }}
+  <style>
+    .calc { display: grid; gap: 20px; max-width: 420px; padding: 24px 0 8px; }
+    .field label { display: block; margin-bottom: 4px; font-weight: 600; }
+    .field input {
+      width: 100%; padding: 10px 12px; font: inherit; color: var(--ink);
+      background: #fff; border: 1px solid var(--line); border-radius: 4px;
+    }
+    .field input:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .field input[aria-invalid="true"] { border-color: #a4161a; }
+    .error { margin: 6px 0 0; color: #a4161a; font-size: .95rem; }
+    .calc button { justify-self: start; cursor: pointer; font: inherit; font-weight: 600; }
+    .result {
+      max-width: 420px; margin: 8px 0 0; padding: 16px 20px; font-size: 1.6rem; font-weight: 800;
+      border-radius: 6px; border-left: 8px solid;
+    }
+    .result small { display: block; margin-top: 4px; font-size: .95rem; font-weight: 400; }
+    .result.ok     { background: #e3f4e6; color: #17582a; border-color: #2e9a4d; }
+    .result.warn   { background: #fff3cd; color: #6b4a00; border-color: #e0a526; }
+    .result.danger { background: #fde4e4; color: #8a1218; border-color: #c62828; }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="wrap">
+    <h1 class="page-title">Tính chỉ số BMI</h1>
+
+    <form class="calc" method="post" action="{{ url_for('bmi') }}" novalidate>
+      {% for f in fields %}
+      <div class="field">
+        <label for="{{ f.key }}">{{ f.title }}</label>
+        <input id="{{ f.key }}" name="{{ f.key }}" type="text" inputmode="decimal" autocomplete="off"
+               value="{{ values[f.key] }}"
+               {% if errors[f.key] %}aria-invalid="true" aria-describedby="{{ f.key }}-error"{% endif %}>
+        {% if errors[f.key] %}<p class="error" id="{{ f.key }}-error">{{ errors[f.key] }}</p>{% endif %}
+      </div>
+      {% endfor %}
+
+      <button class="btn btn-primary" type="submit">Tính BMI</button>
+    </form>
+
+    {% if result %}
+    <p class="result {{ result.tone }}" role="status">
+      {{ result.index }} · {{ result.category }}
+      <small>Cân nặng nên có: {{ result.low }} – {{ result.high }} kg (BMI 18,5 – 22,9)</small>
+    </p>
+    {% endif %}
+  </div>
+{% endblock %}

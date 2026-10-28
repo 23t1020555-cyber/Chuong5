@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Liên hệ - {{ shop.name }}{% endblock %}
+
+{% block content %}
+  <div class="wrap">
+    <h1 class="page-title">Liên hệ</h1>
+    <div class="info">
+      <div>
+        <h2>Điện thoại</h2>
+        <p class="big"><a href="tel:{{ shop.phone | replace(' ', '') }}">{{ shop.phone }}</a></p>
+      </div>
+      <div>
+        <h2>Địa chỉ</h2>
+        <p class="big">{{ shop.address }}</p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

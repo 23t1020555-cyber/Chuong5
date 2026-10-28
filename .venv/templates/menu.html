@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Thực đơn - {{ shop.name }}{% endblock %}
+
+{% block styles %}
+  {{ super() }}
+  <style>
+    .grid {
+      display: grid; gap: 20px; padding: 24px 0 8px;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    .card { background: #fff; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+    .thumb {
+      position: relative; aspect-ratio: 4 / 3; display: grid; place-items: center;
+      background: var(--plum-soft); color: var(--plum); font-size: 2.4rem;
+    }
+    .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .card-body { padding: 14px 16px 16px; }
+    .card h3 { margin: 0 0 2px; font-size: 1.05rem; }
+    .price { margin: 0; font-weight: 800; color: var(--gold-deep); }
+    .menu-count { margin: 0; color: #5d5166; }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="wrap">
+    <h1 class="page-title">Thực đơn</h1>
+    <p class="menu-count">{{ menu | length }} món</p>
+
+    <div class="grid">
+      {% for item in menu %}
+      <div class="card">
+        <div class="thumb">
+          <span aria-hidden="true">☕</span>
+          <img src="{{ url_for('static', filename=item.image) }}" alt="{{ item.name }}" onerror="this.remove()">
+        </div>
+        <div class="card-body">
+          <h3>{{ item.name }}</h3>
+          <p class="price">{{ item.price | vnd }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
